@@ -56,6 +56,8 @@ extern int pthread_setcancelstate(int state, int *oldstate);
 
 extern int pthread_setcanceltype(int type, int *oldtype);
 
+extern int get_thread_count(void);
+
 #ifdef __cplusplus
 }
 #endif

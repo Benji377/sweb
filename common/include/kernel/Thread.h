@@ -111,6 +111,8 @@ class Thread
      */
     Lock* holding_lock_list_;
 
+    ustl::string name_;
+
   private:
     Thread(Thread const &src);
     Thread &operator=(Thread const &src);
@@ -125,8 +127,6 @@ class Thread
     ThreadState getState() const;
 
     FileSystemInfo* working_dir_;
-
-    ustl::string name_;
 
 };
 

@@ -18,5 +18,11 @@ class Syscall
 
     static size_t createprocess(size_t path, size_t sleep);
     static void trace();
+
+    static uint32 get_thread_count();
+
+    static int mapPage(size_t vpn);
+    static int changename(char *name);
+    static size_t currentprocess(char *buf, size_t size);
 };
 

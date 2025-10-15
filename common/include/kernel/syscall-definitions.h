@@ -17,3 +17,8 @@
 #define sc_createprocess 191
 #define sc_trace 252
 
+#define sc_threadcount 2048
+#define sc_mappage 2049
+#define sc_changename 2050
+#define sc_currentprocess 2051
+

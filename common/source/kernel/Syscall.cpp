@@ -7,6 +7,7 @@
 #include "ProcessRegistry.h"
 #include "File.h"
 #include "Scheduler.h"
+#include "Loader.h"
 
 size_t Syscall::syscallException(size_t syscall_number, size_t arg1, size_t arg2, size_t arg3, size_t arg4, size_t arg5)
 {
@@ -48,6 +49,18 @@ size_t Syscall::syscallException(size_t syscall_number, size_t arg1, size_t arg2
       break;
     case sc_pseudols:
       pseudols((const char*) arg1, (char*) arg2, arg3);
+      break;
+    case sc_threadcount: 
+      return_value = get_thread_count(); 
+      break; // you will need many debug hours if you forget the break
+    case sc_mappage:
+      return_value = mapPage(arg1);
+      break;
+    case sc_changename:
+      return_value = changename((char*)arg1);
+      break;
+    case sc_currentprocess:
+      return_value = currentprocess((char*)arg1, arg2);
       break;
     default:
       return_value = -1;
@@ -181,3 +194,38 @@ void Syscall::trace()
   currentThread->printBacktrace();
 }
 
+uint32 Syscall::get_thread_count() {
+  return Scheduler::instance()->getThreadCount();
+}
+
+int Syscall::mapPage(size_t vpn) {
+  currentThread->loader_->vpn = vpn;
+  return 0;
+}
+
+size_t Syscall::currentprocess(char *buf, size_t size) {
+  if (buf == nullptr || (size_t)buf > USER_BREAK)
+    return -1;
+  auto name = currentThread->getName();
+  auto length = strlen(name)+1;
+
+  if (length > (size_t)size) {
+    return 1;
+  }
+  memcpy(buf, name, length);
+  return 0;
+}
+int Syscall::changename(char *name) {
+  if ((size_t)name < PAGE_SIZE || (size_t)name > USER_BREAK)
+    return -1;
+  if (strlen(name) > 255)
+    return -1;
+
+
+  char new_name[255];
+  strncpy(new_name, name, 255);
+  debug(SYSCALL, "new name: %s", new_name);
+
+  currentThread->name_ = new_name;
+  return 0;
+}

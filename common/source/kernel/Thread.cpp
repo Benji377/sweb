@@ -31,8 +31,8 @@ extern "C" void threadStartHack()
 
 Thread::Thread(FileSystemInfo *working_dir, ustl::string name, Thread::TYPE type) :
     kernel_registers_(0), user_registers_(0), switch_to_userspace_(type == Thread::USER_THREAD ? 1 : 0), loader_(0),
-    next_thread_in_lock_waiters_list_(0), lock_waiting_on_(0), holding_lock_list_(0), state_(Running), tid_(0),
-    my_terminal_(0), working_dir_(working_dir), name_(ustl::move(name))
+    next_thread_in_lock_waiters_list_(0), lock_waiting_on_(0), holding_lock_list_(0), name_(ustl::move(name)),
+    state_(Running), tid_(0), my_terminal_(0), working_dir_(working_dir)
 {
   debug(THREAD, "Thread ctor, this is %p, stack is %p, fs_info ptr: %p\n", this, kernel_stack_, working_dir_);
   ArchThreads::createKernelRegisters(kernel_registers_, (void*) (type == Thread::USER_THREAD ? 0 : threadStartHack), getKernelStackStartPointer());

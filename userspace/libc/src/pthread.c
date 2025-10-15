@@ -1,4 +1,6 @@
 #include "pthread.h"
+#include "sys/syscall.h"
+#include "../../../common/include/kernel/syscall-definitions.h"
 
 /**
  * function stub
@@ -189,3 +191,6 @@ int pthread_setcanceltype(int type, int *oldtype)
   return -1;
 }
 
+int get_thread_count(void) {
+  return __syscall(sc_threadcount, 0x0, 0x0, 0x0, 0x0, 0x0);
+}

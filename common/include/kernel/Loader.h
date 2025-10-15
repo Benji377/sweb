@@ -34,6 +34,8 @@ class Loader
 
     ArchMemory arch_memory_;
 
+    size_t vpn;
+
   private:
 
     /**

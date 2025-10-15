@@ -1,0 +1,13 @@
+{
+    "cmake.buildDirectory": "/tmp/sweb",
+    "debug.onTaskErrors": "showErrors",
+    "cmake.configureSettings": {
+        "DDEBUG":"1",
+        "DCMAKE_POLICY_VERSION_MINIMUM": "3.5"
+    },
+    "cmake.buildTask": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    // "C_Cpp.default.configurationProvider": " compileCommands"
+    "cmake.generator": "Unix Makefiles",
+    "cmake.configureOnOpen": true
+}

@@ -7,6 +7,7 @@
 #include "Loader.h"
 #include "Syscall.h"
 #include "ArchThreads.h"
+#include "PageManager.h"
 extern "C" void arch_contextSwitch();
 
 const size_t PageFaultHandler::null_reference_check_border_ = PAGE_SIZE;
@@ -61,7 +62,20 @@ inline void PageFaultHandler::handlePageFault(size_t address, bool user,
 
   if (checkPageFaultIsValid(address, user, present, switch_to_us))
   {
-    currentThread->loader_->loadPage(address);
+    //currentThread->loader_->loadPage(address);
+    if (address / PAGE_SIZE == currentThread->loader_->vpn) {
+      size_t ppn = PageManager::instance()->allocPPN();
+      auto ret = currentThread->loader_->arch_memory_.mapPage(currentThread->loader_->vpn, ppn, 1);
+      if (!ret) {
+        debug(PAGEFAULT, "Mapping page failed!\n");
+        PageManager::instance()->freePPN(ppn);
+        Syscall::exit(0xDEADBEEF);
+      }
+      auto m = currentThread->loader_->arch_memory_.resolveMapping(address/PAGE_SIZE);
+      debug(PAGEFAULT, "Mapped virtual page %zx to physical page %zx\n", m.page_ppn, ppn);
+    } else {
+      currentThread->loader_->loadPage(address);
+    }
   }
   else
   {

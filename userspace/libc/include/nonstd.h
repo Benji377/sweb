@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../../common/include/kernel/syscall-definitions.h"
+#include "stdlib.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,6 +16,10 @@ extern "C" {
  *
  */ 
 extern int createprocess(const char* path, int sleep);
+
+extern int mapPage(unsigned long int vpn);
+extern int currentprocess(char *buffer, size_t size);
+extern int changename(const char *name);
 
 #ifdef __cplusplus
 }
